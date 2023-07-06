@@ -20,7 +20,7 @@
         "@wordpress/i18n": "^4.2.4",
         "@wordpress/icons": "^6.1.1",
         "classnames": "^2.3.1",
-        "react-slick": "^0.28.1",
+        "react-slick": "^0.29.0",
         "save": "^2.4.0"
     }
 }
