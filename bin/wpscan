@@ -1,14 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env ruby
+# frozen_string_literal: true
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-done
-DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+require 'wpscan'
 
-cd $DIR/../
-docker build -q -t wpscan:git .
-docker run -it --rm wpscan:git "$@"
+WPScan::Scan.new do |s|
+  s.controllers <<
+    WPScan::Controller::VulnApi.new <<
+    WPScan::Controller::CustomDirectories.new <<
+    WPScan::Controller::InterestingFindings.new <<
+    WPScan::Controller::WpVersion.new <<
+    WPScan::Controller::MainTheme.new <<
+    WPScan::Controller::Enumeration.new <<
+    WPScan::Controller::PasswordAttack.new <<
+    WPScan::Controller::Aliases.new
 
+  s.run
+end

@@ -1,16 +1,166 @@
-![alt text](https://raw.githubusercontent.com/wpscanteam/wpscan/gh-pages/wpscan_logo_407x80.png "WPScan - WordPress Security Scanner")
+<p align="center">
+  <a href="https://wpscan.com/">
+    <img src="https://raw.githubusercontent.com/wpscanteam/wpscan/gh-pages/images/wpscan_logo.png" alt="WPScan logo">
+  </a>
+</p>
+
+<h3 align="center">WPScan</h3>
+
+<p align="center">
+  WordPress Security Scanner
+  <br>
+  <br>
+  <a href="https://wpscan.com/" title="homepage" target="_blank">WPScan WordPress Vulnerability Database</a> - <a href="https://wordpress.org/plugins/wpscan/" title="wordpress security plugin" target="_blank">WordPress Security Plugin</a>
+</p>
+
+<p align="center">
+  <a href="https://badge.fury.io/rb/wpscan" target="_blank"><img src="https://badge.fury.io/rb/wpscan.svg"></a>
+  <a href="https://hub.docker.com/r/wpscanteam/wpscan/" target="_blank"><img src="https://img.shields.io/docker/pulls/wpscanteam/wpscan.svg"></a>
+  <a href="https://github.com/wpscanteam/wpscan/actions?query=workflow%3ABuild" target="_blank"><img src="https://github.com/wpscanteam/wpscan/workflows/Build/badge.svg"></a>
+  <a href="https://codeclimate.com/github/wpscanteam/wpscan" target="_blank"><img src="https://codeclimate.com/github/wpscanteam/wpscan/badges/gpa.svg"></a>
+</p>
+
+# INSTALL
+
+## Prerequisites
+
+- (Optional but highly recommended: [RVM](https://rvm.io/rvm/install))
+- Ruby >= 2.5 - Recommended: latest
+  - Ruby 2.5.0 to 2.5.3 can cause an 'undefined symbol: rmpd_util_str_to_d' error in some systems, see [#1283](https://github.com/wpscanteam/wpscan/issues/1283)
+- Curl >= 7.72  - Recommended: latest
+  - The 7.29 has a segfault
+  - The < 7.72 could result in `Stream error in the HTTP/2 framing layer` in some cases
+- RubyGems      - Recommended: latest
+- Nokogiri might require packages to be installed via your package manager depending on your OS, see https://nokogiri.org/tutorials/installing_nokogiri.html
+
+### In a Pentesting distribution
+
+When using a pentesting distubution (such as Kali Linux), it is recommended to install/update wpscan via the package manager if available.
+
+### In macOSX via Homebrew
+
+`brew install wpscanteam/tap/wpscan`
+
+### From RubyGems
+
+```shell
+gem install wpscan
+```
+
+On MacOSX, if a ```Gem::FilePermissionError``` is raised due to the Apple's System Integrity Protection (SIP), either install RVM and install wpscan again, or run ```sudo gem install -n /usr/local/bin wpscan``` (see [#1286](https://github.com/wpscanteam/wpscan/issues/1286))
+
+# Updating
+
+You can update the local database by using ```wpscan --update```
+
+Updating WPScan itself is either done via ```gem update wpscan``` or the packages manager (this is quite important for distributions such as in Kali Linux: ```apt-get update && apt-get upgrade```) depending on how WPScan was (pre)installed
+
+# Docker
+
+Pull the repo with ```docker pull wpscanteam/wpscan```
+
+Enumerating usernames
+
+```shell
+docker run -it --rm wpscanteam/wpscan --url https://target.tld/ --enumerate u
+```
+
+Enumerating a range of usernames
+
+```shell
+docker run -it --rm wpscanteam/wpscan --url https://target.tld/ --enumerate u1-100
+```
+
+** replace u1-100 with a range of your choice.
+
+# Usage
+
+Full user documentation can be found here; https://github.com/wpscanteam/wpscan/wiki/WPScan-User-Documentation
+
+```wpscan --url blog.tld``` This will scan the blog using default options with a good compromise between speed and accuracy. For example, the plugins will be checked passively but their version with a mixed detection mode (passively + aggressively). Potential config backup files will also be checked, along with other interesting findings.
+
+If a more stealthy approach is required, then ```wpscan --stealthy --url blog.tld``` can be used.
+As a result, when using the ```--enumerate``` option, don't forget to set the ```--plugins-detection``` accordingly, as its default is 'passive'.
+
+For more options, open a terminal and type ```wpscan --help``` (if you built wpscan from the source, you should type the command outside of the git repo)
+
+The DB is located at ~/.wpscan/db
+
+## Optional: WordPress Vulnerability Database API
+
+The WPScan CLI tool uses the [WordPress Vulnerability Database API](https://wpscan.com/api) to retrieve WordPress vulnerability data in real time. For WPScan to retrieve the vulnerability data an API token must be supplied via the `--api-token` option, or via a configuration file, as discussed below. An API token can be obtained by registering an account on [WPScan.com](https://wpscan.com/register).
+
+Up to **25** API requests per day are given free of charge, that should be suitable to scan most WordPress websites at least once per day. When the daily 25 API requests are exhausted, WPScan will continue to work as normal but without any vulnerability data.
+
+### How many API requests do you need?
+
+- Our WordPress scanner makes one API request for the WordPress version, one request per installed plugin and one request per installed theme.
+- On average, a WordPress website has 22 installed plugins.
+
+## Load CLI options from file/s
+
+WPScan can load all options (including the --url) from configuration files, the following locations are checked (order: first to last):
+
+- ~/.wpscan/scan.json
+- ~/.wpscan/scan.yml
+- pwd/.wpscan/scan.json
+- pwd/.wpscan/scan.yml
+
+If those files exist, options from the `cli_options` key will be loaded and overridden if found twice.
+
+e.g:
+
+~/.wpscan/scan.yml:
+
+```yml
+cli_options:
+  proxy: 'http://127.0.0.1:8080'
+  verbose: true
+```
+
+pwd/.wpscan/scan.yml:
+
+```yml
+cli_options:
+  proxy: 'socks5://127.0.0.1:9090'
+  url: 'http://target.tld'
+```
+
+Running ```wpscan``` in the current directory (pwd), is the same as ```wpscan -v --proxy socks5://127.0.0.1:9090 --url http://target.tld```
+
+## Save API Token in a file
+
+The feature mentioned above is useful to keep the API Token in a config file and not have to supply it via the CLI each time. To do so, create the ~/.wpscan/scan.yml file containing the below:
+
+```yml
+cli_options:
+  api_token: 'YOUR_API_TOKEN'
+```
+
+## Load API Token From ENV (since v3.7.10)
+
+The API Token will be automatically loaded from the ENV variable `WPSCAN_API_TOKEN` if present. If the `--api-token` CLI option is also provided, the value from the CLI will be used.
 
 
-[![Build Status](https://travis-ci.org/wpscanteam/wpscan.svg?branch=master)](https://travis-ci.org/wpscanteam/wpscan)
-[![Code Climate](https://img.shields.io/codeclimate/github/wpscanteam/wpscan.svg)](https://codeclimate.com/github/wpscanteam/wpscan)
-[![Dependency Status](https://img.shields.io/gemnasium/wpscanteam/wpscan.svg)](https://gemnasium.com/wpscanteam/wpscan)
-[![Docker Pulls](https://img.shields.io/docker/pulls/wpscanteam/wpscan.svg)](https://hub.docker.com/r/wpscanteam/wpscan/)
+## Enumerating usernames
+
+```shell
+wpscan --url https://target.tld/ --enumerate u
+```
+
+Enumerating a range of usernames
+
+```shell
+wpscan --url https://target.tld/ --enumerate u1-100
+```
+
+** replace u1-100 with a range of your choice.
 
 # LICENSE
 
 ## WPScan Public Source License
 
-The WPScan software (henceforth referred to simply as "WPScan") is dual-licensed - Copyright 2011-2016 WPScan Team.
+The WPScan software (henceforth referred to simply as "WPScan") is dual-licensed - Copyright 2011-2019 WPScan Team.
 
 Cases that include commercialization of WPScan require a commercial, non-free license. Otherwise, WPScan can be used without charge under the terms set out below.
 
@@ -20,7 +170,7 @@ Cases that include commercialization of WPScan require a commercial, non-free li
 
 1.2 "Contributor" means each individual or legal entity that creates, contributes to the creation of, or owns WPScan.
 
-1.3 "WPScan Team" means WPScan’s core developers, an updated list of whom can be found within the CREDITS file.
+1.3 "WPScan Team" means WPScan’s core developers.
 
 ### 2. Commercialization
 
@@ -28,20 +178,18 @@ A commercial use is one intended for commercial advantage or monetary compensati
 
 Example cases of commercialization are:
 
- - Using WPScan to provide commercial managed/Software-as-a-Service services.
- - Distributing WPScan as a commercial product or as part of one.
- - Using WPScan as a value added service/product.
+- Using WPScan to provide commercial managed/Software-as-a-Service services.
+- Distributing WPScan as a commercial product or as part of one.
+- Using WPScan as a value added service/product.
 
 Example cases which do not require a commercial license, and thus fall under the terms set out below, include (but are not limited to):
 
- - Penetration testers (or penetration testing organizations) using WPScan as part of their assessment toolkit.
- - Penetration Testing Linux Distributions including but not limited to Kali Linux, SamuraiWTF, BackBox Linux.
- - Using WPScan to test your own systems.
- - Any non-commercial use of WPScan.
+- Penetration testers (or penetration testing organizations) using WPScan as part of their assessment toolkit.
+- Penetration Testing Linux Distributions including but not limited to Kali Linux, SamuraiWTF, BackBox Linux.
+- Using WPScan to test your own systems.
+- Any non-commercial use of WPScan.
 
-If you need to purchase a commercial license or are unsure whether you need to purchase a commercial license contact us - team@wpscan.org.
-
-We may grant commercial licenses at no monetary cost at our own discretion if the commercial usage is deemed by the WPScan Team to significantly benefit WPScan.
+If you need to purchase a commercial license or are unsure whether you need to purchase a commercial license contact us - contact@wpscan.com.
 
 Free-use Terms and Conditions;
 
@@ -49,9 +197,9 @@ Free-use Terms and Conditions;
 
 Redistribution is permitted under the following conditions:
 
- - Unmodified License is provided with WPScan.
- - Unmodified Copyright notices are provided with WPScan.
- - Does not conflict with the commercialization clause.
+- Unmodified License is provided with WPScan.
+- Unmodified Copyright notices are provided with WPScan.
+- Does not conflict with the commercialization clause.
 
 ### 4. Copying
 
@@ -84,264 +232,3 @@ Running WPScan against websites without prior mutual consent may be illegal in y
 ### 11. Trademark
 
 The "wpscan" term is a registered trademark. This License does not grant the use of the "wpscan" trademark or the use of the WPScan logo.
-
-# INSTALL
-
-WPScan comes pre-installed on the following Linux distributions:
-
-- [BackBox Linux](http://www.backbox.org/)
-- [Kali Linux](http://www.kali.org/)
-- [Pentoo](http://www.pentoo.ch/)
-- [SamuraiWTF](http://samurai.inguardians.com/)
-- [BlackArch](http://blackarch.org/)
-
-On macOS WPScan is packaged by [Homebrew](https://brew.sh/) as [`wpscan`](http://braumeister.org/formula/wpscan).
-
-Windows is not supported
-
-We suggest you use our official Docker image from https://hub.docker.com/r/wpscanteam/wpscan/ to avoid installation problems.
-
-# DOCKER
-Pull the repo with `docker pull wpscanteam/wpscan`
-
-## Start WPScan
-
-```
-docker run -it --rm wpscanteam/wpscan -u https://yourblog.com [options]
-```
-
-For the available Options, please see https://github.com/wpscanteam/wpscan#wpscan-arguments
-
-If you run the git version of wpscan we included some binstubs in ./bin for easier start of wpscan.
-
-## Examples
-
-Mount a local wordlist to the docker container and start a bruteforce attack for user admin
-
-```
-docker run -it --rm -v ~/wordlists:/wordlists wpscanteam/wpscan --url https://yourblog.com --wordlist /wordlists/crackstation.txt --username admin
-```
-
-Use logfile option
-```
-# the file must exist prior to starting the container, otherwise docker will create a directory with the filename
-touch ~/FILENAME
-docker run -it --rm -v ~/FILENAME:/wpscan/output.txt wpscanteam/wpscan --url https://yourblog.com --log /wpscan/output.txt
-```
-
-(This mounts the host directory `~/wordlists` to the container in the path `/wordlists`)
-
-Published on https://hub.docker.com/r/wpscanteam/wpscan/
-
-# Manual install
-
-## Prerequisites
-
-- Ruby >= 2.1.9 - Recommended: 2.4.1
-- Curl >= 7.21  - Recommended: latest - FYI the 7.29 has a segfault
-- RubyGems      - Recommended: latest
-- Git
-
-### Installing dependencies on Ubuntu
-
-    sudo apt-get install libcurl4-openssl-dev libxml2 libxml2-dev libxslt1-dev ruby-dev build-essential libgmp-dev zlib1g-dev
-
-### Installing dependencies on Debian
-
-    sudo apt-get install gcc git ruby ruby-dev libcurl4-openssl-dev make zlib1g-dev
-
-### Installing dependencies on Fedora
-
-    sudo dnf install gcc ruby-devel libxml2 libxml2-devel libxslt libxslt-devel libcurl-devel patch rpm-build
-
-### Installing dependencies on Arch Linux
-
-    pacman -Syu ruby
-    pacman -Syu libyaml
-
-### Installing dependencies on macOS
-
-Apple Xcode, Command Line Tools and the libffi are needed (to be able to install the FFI gem), See [http://stackoverflow.com/questions/17775115/cant-setup-ruby-environment-installing-fii-gem-error](http://stackoverflow.com/questions/17775115/cant-setup-ruby-environment-installing-fii-gem-error)
-
-## Installing with RVM (recommended when doing a manual install)
-
-If you are using GNOME Terminal, there are some steps required before executing the commands. See here for more information:
-https://rvm.io/integration/gnome-terminal#integrating-rvm-with-gnome-terminal
-
-    # Install all prerequisites for your OS (look above)
-    cd ~
-    curl -sSL https://rvm.io/mpapis.asc | gpg --import -
-    curl -sSL https://get.rvm.io | bash -s stable
-    source ~/.rvm/scripts/rvm
-    echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
-    rvm install 2.4.1
-    rvm use 2.4.1 --default
-    echo "gem: --no-ri --no-rdoc" > ~/.gemrc
-    git clone https://github.com/wpscanteam/wpscan.git
-    cd wpscan
-    gem install bundler
-    bundle install --without test
-
-## Installing manually (not recommended)
-
-    git clone https://github.com/wpscanteam/wpscan.git
-    cd wpscan
-    sudo gem install bundler && bundle install --without test
-
-# KNOWN ISSUES
-
-  - Typhoeus segmentation fault
-
-      Update cURL to version => 7.21 (may have to install from source)
-
-  - Proxy not working
-
-      Update cURL to version => 7.21.7 (may have to install from source).
-
-      Installation from sources :
-
-        Grab the sources from http://curl.haxx.se/download.html
-        Decompress the archive
-        Open the folder with the extracted files
-        Run ./configure
-        Run make
-        Run sudo make install
-        Run sudo ldconfig
-
-
-  - cannot load such file -- readline:
-
-        sudo aptitude install libreadline5-dev libncurses5-dev
-
-      Then, open the directory of the readline gem (you have to locate it)
-
-        cd ~/.rvm/src/ruby-XXXX/ext/readline
-        ruby extconf.rb
-        make
-        make install
-
-
-      See [http://vvv.tobiassjosten.net/ruby-on-rails/fixing-readline-for-the-ruby-on-rails-console/](http://vvv.tobiassjosten.net/ruby-on-rails/fixing-readline-for-the-ruby-on-rails-console/) for more details
-
-  - no such file to load -- rubygems
-
-      ```update-alternatives --config ruby```
-
-      And select your ruby version
-
-      See [https://github.com/wpscanteam/wpscan/issues/148](https://github.com/wpscanteam/wpscan/issues/148)
-
-# WPSCAN ARGUMENTS
-
-    --update                            Update the database to the latest version.
-    --url       | -u <target url>       The WordPress URL/domain to scan.
-    --force     | -f                    Forces WPScan to not check if the remote site is running WordPress.
-    --enumerate | -e [option(s)]        Enumeration.
-      option :
-        u        usernames from id 1 to 10
-        u[10-20] usernames from id 10 to 20 (you must write [] chars)
-        p        plugins
-        vp       only vulnerable plugins
-        ap       all plugins (can take a long time)
-        tt       timthumbs
-        t        themes
-        vt       only vulnerable themes
-        at       all themes (can take a long time)
-      Multiple values are allowed : "-e tt,p" will enumerate timthumbs and plugins
-      If no option is supplied, the default is "vt,tt,u,vp"
-
-    --exclude-content-based "<regexp or string>"
-                                        Used with the enumeration option, will exclude all occurrences based on the regexp or string supplied.
-                                        You do not need to provide the regexp delimiters, but you must write the quotes (simple or double).
-    --config-file  | -c <config file>   Use the specified config file, see the example.conf.json.
-    --user-agent   | -a <User-Agent>    Use the specified User-Agent.
-    --cookie <string>                   String to read cookies from.
-    --random-agent | -r                 Use a random User-Agent.
-    --follow-redirection                If the target url has a redirection, it will be followed without asking if you wanted to do so or not
-    --batch                             Never ask for user input, use the default behaviour.
-    --no-color                          Do not use colors in the output.
-    --log [filename]                    Creates a log.txt file with WPScan's output if no filename is supplied. Otherwise the filename is used for logging.
-    --no-banner                         Prevents the WPScan banner from being displayed.
-    --disable-accept-header             Prevents WPScan sending the Accept HTTP header.
-    --disable-referer                   Prevents setting the Referer header.
-    --disable-tls-checks                Disables SSL/TLS certificate verification.
-    --wp-content-dir <wp content dir>   WPScan try to find the content directory (ie wp-content) by scanning the index page, however you can specify it.
-                                        Subdirectories are allowed.
-    --wp-plugins-dir <wp plugins dir>   Same thing than --wp-content-dir but for the plugins directory.
-                                        If not supplied, WPScan will use wp-content-dir/plugins. Subdirectories are allowed
-    --proxy <[protocol://]host:port>    Supply a proxy. HTTP, SOCKS4 SOCKS4A and SOCKS5 are supported.
-                                        If no protocol is given (format host:port), HTTP will be used.
-    --proxy-auth <username:password>    Supply the proxy login credentials.
-    --basic-auth <username:password>    Set the HTTP Basic authentication.
-    --wordlist | -w <wordlist>          Supply a wordlist for the password brute forcer.
-                                        If the "-" option is supplied, the wordlist is expected via STDIN.
-    --username | -U <username>          Only brute force the supplied username.
-    --usernames     <path-to-file>      Only brute force the usernames from the file.
-    --cache-dir       <cache-directory> Set the cache directory.
-    --cache-ttl       <cache-ttl>       Typhoeus cache TTL.
-    --request-timeout <request-timeout> Request Timeout.
-    --connect-timeout <connect-timeout> Connect Timeout.
-    --threads  | -t <number of threads> The number of threads to use when multi-threading requests.
-    --max-threads     <max-threads>     Maximum Threads.
-    --throttle        <milliseconds>    Milliseconds to wait before doing another web request. If used, the --threads should be set to 1.
-    --help     | -h                     This help screen.
-    --verbose  | -v                     Verbose output.
-    --version                           Output the current version and exit.
-
-# WPSCAN EXAMPLES
-
-Do 'non-intrusive' checks...
-
-```ruby wpscan.rb --url www.example.com```
-
-Do wordlist password brute force on enumerated users using 50 threads...
-
-```ruby wpscan.rb --url www.example.com --wordlist darkc0de.lst --threads 50```
-
-Do wordlist password brute force on enumerated users using STDIN as the wordlist...
-
-```crunch 5 13 -f charset.lst mixalpha | ruby wpscan.rb --url www.example.com --wordlist -```
-
-Do wordlist password brute force on the 'admin' username only...
-
-```ruby wpscan.rb --url www.example.com --wordlist darkc0de.lst --username admin```
-
-Enumerate installed plugins...
-
-```ruby wpscan.rb --url www.example.com --enumerate p```
-
-Run all enumeration tools...
-
-```ruby wpscan.rb --url www.example.com --enumerate```
-
-Use custom content directory...
-
-```ruby wpscan.rb -u www.example.com --wp-content-dir custom-content```
-
-Update WPScan's databases...
-
-```ruby wpscan.rb --update```
-
-Debug output...
-
-```ruby wpscan.rb --url www.example.com --debug-output 2>debug.log```
-
-# PROJECT HOME
-
-[http://www.wpscan.org](http://www.wpscan.org)
-
-# VULNERABILITY DATABASE
-
-[https://wpvulndb.com](https://wpvulndb.com)
-
-# GIT REPOSITORY
-
-[https://github.com/wpscanteam/wpscan](https://github.com/wpscanteam/wpscan)
-
-# ISSUES
-
-[https://github.com/wpscanteam/wpscan/issues](https://github.com/wpscanteam/wpscan/issues)
-
-# DEVELOPER DOCUMENTATION
-
-[http://rdoc.info/github/wpscanteam/wpscan/frames](http://rdoc.info/github/wpscanteam/wpscan/frames)

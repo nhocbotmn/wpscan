@@ -1,29 +1,41 @@
-FROM ruby:2.4-alpine
-MAINTAINER WPScan Team <team@wpscan.org>
+FROM ruby:3.0.2-alpine AS builder
+LABEL maintainer="WPScan Team <contact@wpscan.com>"
 
-ARG BUNDLER_ARGS="--jobs=8 --without test"
-
-RUN adduser -h /wpscan -g WPScan -D wpscan
-RUN echo "gem: --no-ri --no-rdoc" > /etc/gemrc
-
-COPY Gemfile /wpscan
-COPY Gemfile.lock /wpscan
-
-# runtime dependencies
-RUN apk add --no-cache libcurl procps && \
-  # build dependencies
-  apk add --no-cache --virtual build-deps alpine-sdk ruby-dev libffi-dev zlib-dev && \
-  bundle install --system --gemfile=/wpscan/Gemfile $BUNDLER_ARGS && \
-  apk del --no-cache build-deps
+RUN echo "install: --no-document --no-post-install-message\nupdate: --no-document --no-post-install-message" > /etc/gemrc
 
 COPY . /wpscan
+
+RUN apk add --no-cache git libcurl ruby-dev libffi-dev make gcc musl-dev zlib-dev procps sqlite-dev && \
+  bundle config force_ruby_platform true && \
+  bundle config disable_version_check 'true' && \
+  bundle config without "test development" && \
+  bundle config path.system 'true' && \
+  bundle install --gemfile=/wpscan/Gemfile --jobs=8
+
+WORKDIR /wpscan
+RUN rake install --trace
+
+# needed so non superusers can read gems
+RUN chmod -R a+r /usr/local/bundle
+
+
+FROM ruby:3.0.2-alpine
+LABEL maintainer="WPScan Team <contact@wpscan.com>"
+LABEL org.opencontainers.image.source https://github.com/wpscanteam/wpscan
+
+RUN adduser -h /wpscan -g WPScan -D wpscan
+
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+
 RUN chown -R wpscan:wpscan /wpscan
 
-USER wpscan
-
-RUN /wpscan/wpscan.rb --update --verbose --no-color
+# runtime dependencies
+RUN apk add --no-cache libcurl procps sqlite-libs
 
 WORKDIR /wpscan
 
-ENTRYPOINT ["/wpscan/wpscan.rb"]
-CMD ["--help"]
+USER wpscan
+
+RUN /usr/local/bundle/bin/wpscan --update --verbose
+
+ENTRYPOINT ["/usr/local/bundle/bin/wpscan"]
