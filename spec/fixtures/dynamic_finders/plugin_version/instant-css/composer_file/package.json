@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "autoprefixer": "^9.4.10",
+    "autoprefixer": "^10.0.0",
     "babel-minify-webpack-plugin": "^0.3.1",
     "cross-env": "^5.2.0",
     "monaco-editor": "0.15.6",
     "monaco-editor-webpack-plugin": "^1.7.0",
-    "postcss": "^7.0.14",
-    "postcss-loader": "^3.0.0",
+    "postcss": "^8.4.31",
+    "postcss-loader": "^4.0.0",
     "precss": "^4.0.0",
     "sass.js": "^0.10.13",
     "uglifyjs-webpack-plugin": "^2.1.2"
