@@ -21,8 +21,8 @@
   "author": "Miguras",
   "license": "ISC",
   "dependencies": {
-    "@wordpress/scripts": "^7.1.0",
-    "css-loader": "^3.4.2",
+    "@wordpress/scripts": "^20.0.0",
+    "css-loader": "^5.0.0",
     "html-react-parser": "^0.10.3",
     "image-webpack-loader": "^6.0.0",
     "react-responsive-carousel": "^3.1.51",
