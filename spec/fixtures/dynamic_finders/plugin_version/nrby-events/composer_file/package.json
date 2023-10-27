@@ -14,7 +14,7 @@
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "awesome-debounce-promise": "^2.1.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "cgb-scripts": "^1.23.1",
     "linq": "^4.0.0",
     "material-ui-color": "^1.2.0",
