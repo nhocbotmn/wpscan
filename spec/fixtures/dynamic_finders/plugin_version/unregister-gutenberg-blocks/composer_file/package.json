@@ -50,7 +50,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^1.6.0",
     "qs": "^6.5.1",
     "react-search-input": "^0.11.3",
     "classnames": "^2.2.5"
