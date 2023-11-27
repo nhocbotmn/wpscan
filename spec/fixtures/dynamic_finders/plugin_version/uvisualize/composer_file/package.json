@@ -4,7 +4,7 @@
   "description": "An easy to use yet powerful visualization tool for WordPress",
   "main": "Gruntfile.js",
   "dependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.0.0",
     "grunt-cli": "^0.1.13",
     "grunt-angular-gettext": "^2.1.0"
   },
