@@ -10,7 +10,7 @@
   "dependencies": {
     "@vermilion/post-selector": "^1.0.2",
     "@wordpress/date": "^3.2.0",
-    "axios": "^0.18.0",
+    "axios": "^1.6.3",
     "cgb-scripts": "1.11.1",
     "classnames": "^2.2.6"
   }
