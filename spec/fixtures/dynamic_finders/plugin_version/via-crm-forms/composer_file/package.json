@@ -9,7 +9,7 @@
         "package": "npm run build && zip via-crm-forms-$npm_package_version.zip -q -x@.package.exclude -r ../via-gravityforms-salesforce/build/ ../via-gravityforms-salesforce/src/ ../via-gravityforms-salesforce/vendor/ ../via-gravityforms-salesforce/composer.* ../via-gravityforms-salesforce/package.* ../via-gravityforms-salesforce/*.php ../via-gravityforms-salesforce/readme.txt"
     },
     "dependencies": {
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "grunt": "~0.4.5",
         "grunt-composer": "~0.4.4",
         "grunt-shell": "~0.7.0",
