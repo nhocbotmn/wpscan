@@ -12,7 +12,7 @@
   "author": "Upcasted",
   "license": "ISC",
   "dependencies": {
-    "openai": "^3.1.0",
+    "openai": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^4.6.3"
