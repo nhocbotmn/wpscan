@@ -17,7 +17,7 @@
 		"@wordpress/scripts": "^12.6.0"
 	},
 	"dependencies": {
-		"axios": "^0.21.0",
+		"axios": "^1.6.4",
 		"iframe-resizer": "^4.2.11",
 		"react-iframe-resizer-super": "^0.2.2"
 	}
