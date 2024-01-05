@@ -5,7 +5,7 @@
   "license": "gplv2",
   "dependencies": {
     "@supercharge/sttp": "^1.3.0",
-    "axios": "^0.21.1",
+    "axios": "^1.6.4",
     "prop-types": "^15.8.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"
