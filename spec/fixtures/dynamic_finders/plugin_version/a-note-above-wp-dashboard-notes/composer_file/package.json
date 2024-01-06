@@ -11,7 +11,7 @@
     "build": "webpack -p --mode production"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.4",
     "vue": "^2.6.12"
   },
   "devDependencies": {
