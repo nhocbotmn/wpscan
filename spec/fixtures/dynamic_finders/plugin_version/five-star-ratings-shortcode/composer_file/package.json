@@ -30,7 +30,7 @@
     "homepage": "https://github.com/seezee/Five-Star-Ratings-Plugin#readme",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.14.0",
-        "node-sass": "^4.14.1"
+        "node-sass": "^5.0.0"
     },
     "devDependencies": {
         "cssnano": "^4.1.10",
