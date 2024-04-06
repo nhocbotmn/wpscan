@@ -20,7 +20,7 @@
     "cross-spawn": "^5.1.0",
     "css-loader": "^1.0.0",
     "emergence.js": "^1.1.2",
-    "eslint": "^4.15.0",
+    "eslint": "^9.0.0",
     "eslint-config-wordpress": "^2.0.0",
     "eslint-plugin-jest": "^21.6.1",
     "eslint-plugin-jsx-a11y": "^6.0.3",
