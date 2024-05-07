@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "cgb-scripts": "1.23.0",
-    "whatwg-fetch": "3.2.0"
+    "whatwg-fetch": "3.6.20"
   }
 }
