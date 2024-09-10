@@ -55,7 +55,7 @@
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
     "react-material-ui-carousel": "^2.1.1",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.0.0",
     "react-scripts": "^3.4.3",
     "react-update": "^0.4.4",
     "svg-inline-loader": "^0.8.2",
