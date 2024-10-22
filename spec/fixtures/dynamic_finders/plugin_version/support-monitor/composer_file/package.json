@@ -13,7 +13,7 @@
   "dependencies": {
     "@wordpress/api-fetch": "^3.23.1",
     "axios": "^0.21.1",
-    "vue": "^2.6.11",
+    "vue": "^3.0.0",
     "vue-content-loader": "^0.2.3",
     "vue-router": "^3.4.3",
     "vue-toastr": "^2.1.2"
