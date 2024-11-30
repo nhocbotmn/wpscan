@@ -2,7 +2,7 @@
   "name": "woo-telegram",
   "version": "1.0.0",
   "dependencies": {
-    "browser-sync": "^2.26.13",
+    "browser-sync": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-cached": "^1.1.1",
