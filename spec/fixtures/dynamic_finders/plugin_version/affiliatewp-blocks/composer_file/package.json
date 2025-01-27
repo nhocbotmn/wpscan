@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@wordpress/icons": "^1.4.0",
-		"@wordpress/url": "^2.14.0",
+		"@wordpress/url": "^3.7.1",
 		"classnames": "^2.2.6",
 		"lodash": "^4.17.15",
 		"trailing-slash-it": "^0.3.0"
