@@ -18,6 +18,6 @@
 		"raw-loader": "^4.0.2"
 	},
 	"dependencies": {
-		"@wordpress/media-utils": "^1.18.0"
+		"@wordpress/media-utils": "^3.4.1"
 	}
 }
