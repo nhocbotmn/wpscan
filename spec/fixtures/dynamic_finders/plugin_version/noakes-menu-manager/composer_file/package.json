@@ -35,6 +35,6 @@
     "jshint": "^2.9.5",
     "merge-stream": "^1.0.1",
     "run-sequence": "^2.2.0",
-    "yargs": "^10.0.3"
+    "yargs": "^18.0.0"
   }
 }
