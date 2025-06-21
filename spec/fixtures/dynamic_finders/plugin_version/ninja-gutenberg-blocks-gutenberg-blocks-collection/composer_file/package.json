@@ -8,7 +8,7 @@
 		"eject": "cgb-scripts eject"
 	},
 	"dependencies": {
-		"cgb-scripts": "1.11.0",
+		"cgb-scripts": "1.18.1",
 		"classnames": "^2.2.6",
 		"moment": "^2.22.2",
 		"nuka-carousel": "^4.4.2",
