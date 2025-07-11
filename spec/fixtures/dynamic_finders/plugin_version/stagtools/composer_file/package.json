@@ -13,7 +13,7 @@
 		"grunt": "~1.0.1",
         "load-grunt-tasks": "~3.5.2",
         "grunt-contrib-jshint": "~1.1.0",
-		"grunt-curl": "~2.4.1",
+		"grunt-curl": "~2.5.1",
         "grunt-yaml": "~0.4.1",
 		"grunt-json": "~0.2.0",
 		"grunt-json-massager": "~0.1.0",
