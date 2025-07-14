@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@wordpress/blocks": "^6.0.7",
-    "cgb-scripts": "1.13.0",
+    "cgb-scripts": "1.18.1",
     "classnames": "^2.2.6",
     "md5": "^2.2.1",
     "moment": "^2.23.0",
