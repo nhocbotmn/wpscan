@@ -16,7 +16,7 @@
         "@wordpress/block-editor": "^8.0.3",
         "@wordpress/blocks": "^11.1.4",
         "@wordpress/components": "^19.0.3",
-        "@wordpress/create-block": "^2.7.0",
+        "@wordpress/create-block": "^4.58.0",
         "@wordpress/i18n": "^4.2.4",
         "@wordpress/icons": "^6.1.1",
         "classnames": "^2.3.1",
