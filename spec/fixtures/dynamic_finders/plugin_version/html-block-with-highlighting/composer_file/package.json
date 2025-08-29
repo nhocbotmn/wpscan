@@ -22,7 +22,7 @@
   "dependencies": {
     "@wordpress/blocks": "^6.12.1",
     "@wordpress/element": "^2.11.0",
-    "codemirror": "^5.52.2",
+    "codemirror": "^6.0.0",
     "react-codemirror2": "^7.1.0"
   }
 }
