@@ -6,7 +6,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-toggle-component": "^1.0.5",
-    "react-wp-scripts": "0.2.0",
+    "react-wp-scripts": "1.0.0",
     "styled-components": "^4.1.3"
   },
   "scripts": {
